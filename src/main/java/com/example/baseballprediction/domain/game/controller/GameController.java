@@ -27,7 +27,9 @@ import com.example.baseballprediction.domain.reply.dto.ReplyRequest;
 import com.example.baseballprediction.domain.reply.dto.ReplyResponse;
 import com.example.baseballprediction.domain.reply.service.ReplyService;
 import com.example.baseballprediction.domain.replylike.service.ReplyLikeService;
+import com.example.baseballprediction.global.constant.ErrorCode;
 import com.example.baseballprediction.global.constant.ReplyType;
+import com.example.baseballprediction.global.error.exception.BusinessException;
 import com.example.baseballprediction.global.security.MemberDetails;
 import com.example.baseballprediction.global.util.ApiResponse;
 
@@ -63,7 +65,7 @@ public class GameController {
 		@RequestParam(required = false, defaultValue = "0") int page,
 		@RequestParam(required = false, defaultValue = "15") int item) {
 		if (page < 0)
-			throw new RuntimeException("페이지 번호를 확인해주세요.");
+			throw new BusinessException(ErrorCode.PAGE_NO_BAD_REQUEST);
 		String username = memberDetails == null ? null : memberDetails.getUsername();
 		page = page == 0 ? page : page - 1;
 
@@ -173,7 +175,7 @@ public class GameController {
 
 	//gameId로 게임내역 단건조회
 	@GetMapping("/{gameId}")
-	public ResponseEntity<ApiResponse<GameDtoDaily>> gameIdSingleCheckDetails(
+	public ResponseEntity<ApiResponse<GameDtoDaily>> gameIdSingleCheck(
 		@AuthenticationPrincipal MemberDetails memberDetails,
 		@PathVariable Long gameId) {
 
